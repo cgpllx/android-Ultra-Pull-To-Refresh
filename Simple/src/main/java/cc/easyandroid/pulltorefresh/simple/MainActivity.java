@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,9 +24,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(new MyAdapter(this));
         ptr= (PtrFrameLayout) findViewById(R.id.store_house_ptr_frame);
+        PtrClassicDefaultHeader header = new PtrClassicDefaultHeader(this);
+        header.setLastUpdateTimeKey(getClass().getName());
+//        final StoreHouseHeader header = new StoreHouseHeader(this);
+//        header.setBackgroundColor(Color.BLACK);
+        header.setPadding(0, 50, 0, 50);
+//        header.initWithString("Ultra PTR");
+
+        ptr.setDurationToCloseHeader(500);
+        ptr.setHeaderView(header);
+        ptr.addPtrUIHandler(header);
+//        ptr.addPtrUIHandler(new PtrClassicDefaultHeader(this));
+        ptr.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ptr.refreshComplete();
+                    }
+                }, 3000);
+                System.out.println("onRefreshBegin=" );
+            }
+
+        });
+        listView.setAdapter(new MyAdapter(this));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("position=" + position);
+                if(toast==null){
+                    toast= Toast.makeText(getApplicationContext(),"position="+position,Toast.LENGTH_SHORT);
+                }else{
+                    toast.setText("position="+position);
+                }
+                toast.show();
+            }
+        });
     }
+    Toast toast;
 
     private class MyAdapter extends BaseAdapter {
         Context context;
@@ -52,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             textview.setTextColor(Color.BLACK);
             textview.setTextSize(32);
             textview.setText("text----" + position);
-            textview.setHeight(100);
+            textview.setHeight(300);
             return textview;
         }
     }
