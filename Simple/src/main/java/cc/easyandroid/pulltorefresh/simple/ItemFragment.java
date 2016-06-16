@@ -14,6 +14,8 @@ import cc.easyandroid.pulltorefresh.simple.dummy.DummyContent.DummyItem;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.loadmore.LoadMorePtrFrameLayout;
+import in.srain.cube.views.ptr.loadmore.OnLoadMoreListener;
 
 /**
  * A fragment representing a list of Items.
@@ -61,12 +63,12 @@ public class ItemFragment extends Fragment {
         return view;
     }
 
-    PtrFrameLayout ptr;
+    LoadMorePtrFrameLayout ptr;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ptr = (PtrFrameLayout) view.findViewById(R.id.store_house_ptr_frame);
+        ptr = (LoadMorePtrFrameLayout) view.findViewById(R.id.store_house_ptr_frame);
         PtrClassicDefaultHeader header = new PtrClassicDefaultHeader(getContext());
         header.setLastUpdateTimeKey(getClass().getName());
 //        final StoreHouseHeader header = new StoreHouseHeader(this);
@@ -89,7 +91,12 @@ public class ItemFragment extends Fragment {
                 }, 3000);
                 System.out.println("onRefreshBegin=");
             }
-
+        });
+        ptr.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMoreBegin(LoadMorePtrFrameLayout frame) {
+                System.out.println("onLoadMoreBeginonLoadMoreBegin=");
+            }
         });
     }
 

@@ -3,10 +3,16 @@ package in.srain.cube.views.ptr;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.*;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.Scroller;
 import android.widget.TextView;
+
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
+import in.srain.cube.views.ptr.loadmore.LoadMoreHandle;
 import in.srain.cube.views.ptr.util.PtrCLog;
 
 /**
@@ -43,7 +49,7 @@ public class PtrFrameLayout extends ViewGroup {
     private boolean mPullToRefresh = false;
     private View mHeaderView;
     private PtrUIHandlerHolder mPtrUIHandlerHolder = PtrUIHandlerHolder.create();
-    private PtrHandler mPtrHandler;
+    protected PtrHandler mPtrHandler;
     // working parameters
     private ScrollChecker mScrollChecker;
     private int mPagingTouchSlop;
@@ -162,10 +168,16 @@ public class PtrFrameLayout extends ViewGroup {
             mContent = errorView;
             addView(mContent);
         }
+        //检测mContent 是否是ILoadMoreView 也就是可以添加加载更多
+        onContentViewFinishInflate(mContent);
         if (mHeaderView != null) {
             mHeaderView.bringToFront();
         }
         super.onFinishInflate();
+    }
+
+    protected void onContentViewFinishInflate(View mContent) {
+
     }
 
     @Override
@@ -1037,4 +1049,7 @@ public class PtrFrameLayout extends ViewGroup {
             mIsRunning = true;
         }
     }
+
+    //loadmore  cgp 2016 06 15
+    LoadMoreHandle loadMoreHandle;
 }

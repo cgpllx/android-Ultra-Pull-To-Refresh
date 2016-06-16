@@ -15,16 +15,18 @@ import android.widget.Toast;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.loadmore.LoadMorePtrFrameLayout;
+import in.srain.cube.views.ptr.loadmore.OnLoadMoreListener;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
-    PtrFrameLayout ptr;
+    LoadMorePtrFrameLayout ptr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listview);
-        ptr= (PtrFrameLayout) findViewById(R.id.store_house_ptr_frame);
+        ptr= (LoadMorePtrFrameLayout) findViewById(R.id.store_house_ptr_frame);
         PtrClassicDefaultHeader header = new PtrClassicDefaultHeader(this);
         header.setLastUpdateTimeKey(getClass().getName());
 //        final StoreHouseHeader header = new StoreHouseHeader(this);
@@ -45,21 +47,33 @@ public class MainActivity extends AppCompatActivity {
                         ptr.refreshComplete();
                     }
                 }, 3000);
-                System.out.println("onRefreshBegin=" );
+                System.out.println("onRefreshBegin=");
             }
-
         });
         listView.setAdapter(new MyAdapter(this));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println("position=" + position);
-                if(toast==null){
-                    toast= Toast.makeText(getApplicationContext(),"position="+position,Toast.LENGTH_SHORT);
-                }else{
-                    toast.setText("position="+position);
+                if (toast == null) {
+                    toast = Toast.makeText(getApplicationContext(), "position=" + position, Toast.LENGTH_SHORT);
+                } else {
+                    toast.setText("position=" + position);
                 }
                 toast.show();
+            }
+        });
+        ptr.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMoreBegin(final LoadMorePtrFrameLayout frame) {
+                System.out.println("setOnLoadMoreListener=" +  1);
+                frame.showLoading();
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.showNormal();
+                    }
+                }, 3000);
             }
         });
     }
