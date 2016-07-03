@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        android:text="aaaa"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@android:color/black" />
 
@@ -17,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        android:text="ddddd"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@android:color/black" />
 </LinearLayout>

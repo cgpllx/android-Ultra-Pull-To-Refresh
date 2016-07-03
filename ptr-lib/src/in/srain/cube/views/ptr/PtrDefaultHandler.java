@@ -3,7 +3,7 @@ package in.srain.cube.views.ptr;
 import android.view.View;
 import android.widget.AbsListView;
 
-public abstract class PtrDefaultHandler implements PtrHandler {
+public abstract class  PtrDefaultHandler<T extends PtrFrameLayout> implements PtrHandler<T> {
 
     public static boolean canChildScrollUp(View view) {
         if (android.os.Build.VERSION.SDK_INT < 14) {
@@ -33,7 +33,7 @@ public abstract class PtrDefaultHandler implements PtrHandler {
     }
 
     @Override
-    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+    public boolean checkCanDoRefresh(T frame, View content, View header) {
         return checkContentCanBePulledDown(frame, content, header);
     }
 }

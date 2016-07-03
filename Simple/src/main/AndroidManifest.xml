@@ -8,7 +8,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity
-            android:name=".MainActivity"
+            android:name=".dummy.Main2Activity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
@@ -18,9 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- <activity -->
+        <!-- android:name=".ViewPagerActivity" -->
+        <!-- android:label="@string/title_activity_view_pager"></activity> -->
         <!--<activity-->
-            <!--android:name=".ViewPagerActivity"-->
-            <!--android:label="@string/title_activity_view_pager"></activity>-->
+            <!--android:name=".dummy.Main2Activity"-->
+            <!--android:label="@string/title_activity_main2"></activity>-->
     </application>
 
 </manifest>

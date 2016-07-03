@@ -1,6 +1,7 @@
 package in.srain.cube.views.ptr.loadmore;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -28,6 +29,7 @@ public class LoadMorePtrFrameLayout extends PtrFrameLayout implements LoadMoreHa
         if (contentView instanceof ILoadMoreView) {
             loadMoreView = (ILoadMoreView) contentView;
             DefaultLoadMoreFooter defaultLoadMoreFooter = new DefaultLoadMoreFooter(getContext());
+            defaultLoadMoreFooter.setLayoutParams(new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
             setFooterView(defaultLoadMoreFooter);
             setLoadMoreHandle(defaultLoadMoreFooter);
         }
@@ -37,21 +39,32 @@ public class LoadMorePtrFrameLayout extends PtrFrameLayout implements LoadMoreHa
     @Override
     public void showNormal() {
         loadMoreHandle.showNormal();
+        loading=false;
+    }
+
+    private boolean loading = false;//加载中
+    private boolean noMore=false;// 已经没有更多了
+
+    private boolean isLoading() {
+        return loading;
     }
 
     @Override
     public void loadingCompleted() {
         loadMoreHandle.loadingCompleted();
+        loading=false;
     }
 
     @Override
     public void showLoading() {
+        loading=true;
         loadMoreHandle.showLoading();
     }
 
     @Override
     public void showFail(Exception e) {
         loadMoreHandle.showFail(e);
+        loading=false;
     }
 
 
@@ -76,7 +89,9 @@ public class LoadMorePtrFrameLayout extends PtrFrameLayout implements LoadMoreHa
         footerView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLoadMoreListener.onLoadMoreBegin(LoadMorePtrFrameLayout.this);
+                if(!isLoading()){
+                    onLoadMoreListener.onLoadMoreBegin(LoadMorePtrFrameLayout.this);
+                }
             }
         });
     }
@@ -100,7 +115,10 @@ public class LoadMorePtrFrameLayout extends PtrFrameLayout implements LoadMoreHa
         @Override
         public void onScorllBootom() {//回调给用户
             if (onLoadMoreListener != null) {
-                onLoadMoreListener.onLoadMoreBegin(loadMorePtrFrameLayout);
+                if(!loadMorePtrFrameLayout.isLoading()){
+                    onLoadMoreListener.onLoadMoreBegin(loadMorePtrFrameLayout);
+                }
+
             }
         }
     }

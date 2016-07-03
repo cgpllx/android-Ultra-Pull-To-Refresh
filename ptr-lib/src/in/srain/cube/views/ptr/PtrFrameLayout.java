@@ -601,7 +601,7 @@ public class PtrFrameLayout extends ViewGroup {
      * Call this when data is loaded.
      * The UI will perform complete at once or after a delay, depends on the time elapsed is greater then {@link #mLoadingMinTime} or not.
      */
-    final public void refreshComplete() {
+    public final void refreshComplete() {
         if (DEBUG) {
             PtrCLog.i(LOG_TAG, "refreshComplete");
         }
@@ -991,6 +991,10 @@ public class PtrFrameLayout extends ViewGroup {
                 movePos(deltaY);
                 post(this);
             } else {
+                // fix #239
+                if (mPtrIndicator.getCurrentPosY() != mTo) {
+                    movePos(mTo - mPtrIndicator.getCurrentPosY());
+                }
                 finish();
             }
         }
@@ -1050,6 +1054,4 @@ public class PtrFrameLayout extends ViewGroup {
         }
     }
 
-    //loadmore  cgp 2016 06 15
-    LoadMoreHandle loadMoreHandle;
 }

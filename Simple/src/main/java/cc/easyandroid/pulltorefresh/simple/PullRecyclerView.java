@@ -31,9 +31,9 @@ public class PullRecyclerView extends RecyclerView implements ILoadMoreView {
     public void addFooterView(View view) {
         footerView = view;
         Adapter adapter = getAdapter();
-        if (adapter != null && adapter instanceof RecyclerAdapterWithHF) {
-            RecyclerAdapterWithHF myItemRecyclerViewAdapter = (RecyclerAdapterWithHF) adapter;
-            myItemRecyclerViewAdapter.addFooter(view);
+        if (adapter != null && adapter instanceof Easyadapter) {
+            Easyadapter myItemRecyclerViewAdapter = (Easyadapter) adapter;
+            myItemRecyclerViewAdapter.addFooterView(view);
         }
 
     }
@@ -41,9 +41,9 @@ public class PullRecyclerView extends RecyclerView implements ILoadMoreView {
     @Override
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);
-        if (adapter != null && adapter instanceof RecyclerAdapterWithHF) {
-            RecyclerAdapterWithHF myItemRecyclerViewAdapter = (RecyclerAdapterWithHF) adapter;
-            myItemRecyclerViewAdapter.addFooter(footerView);
+        if (adapter != null && adapter instanceof Easyadapter) {
+            Easyadapter myItemRecyclerViewAdapter = (Easyadapter) adapter;
+            myItemRecyclerViewAdapter.addFooterView(footerView);
         }
     }
 
@@ -67,6 +67,7 @@ public class PullRecyclerView extends RecyclerView implements ILoadMoreView {
         public void onScrollStateChanged(android.support.v7.widget.RecyclerView recyclerView, int newState) {
             if (newState == RecyclerView.SCROLL_STATE_IDLE && isScollBottom(recyclerView)) {
                 if (onScrollBottomListener != null) {
+
                     onScrollBottomListener.onScorllBootom();
                 }
             }

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import cc.easyandroid.pulltorefresh.simple.dummy.DummyContent;
 import cc.easyandroid.pulltorefresh.simple.dummy.DummyContent.DummyItem;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
@@ -20,7 +22,7 @@ import in.srain.cube.views.ptr.loadmore.OnLoadMoreListener;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link  }
  * interface.
  */
 public class ItemFragment extends Fragment {
@@ -28,7 +30,6 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    private OnListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,7 +59,13 @@ public class ItemFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 //                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        Easyadapter    easyada =new Easyadapter( );
+        ArrayList<String> lists=new ArrayList<>();
+        for(int i=0;i<50;i++){
+            lists.add("测试"+i);
+        }
+         easyada.addDatas(lists);
+        recyclerView.setAdapter(easyada);
 //        }
         return view;
     }
@@ -80,13 +87,14 @@ public class ItemFragment extends Fragment {
         ptr.setHeaderView(header);
         ptr.addPtrUIHandler(header);
 //        ptr.addPtrUIHandler(new PtrClassicDefaultHeader(this));
-        ptr.setPtrHandler(new PtrDefaultHandler() {
+        ptr.setPtrHandler(new PtrDefaultHandler<LoadMorePtrFrameLayout>() {
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
+            public void onRefreshBegin(final LoadMorePtrFrameLayout frame) {
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ptr.refreshComplete();
+                        frame.refreshComplete();
+
                     }
                 }, 3000);
                 System.out.println("onRefreshBegin=");
@@ -94,35 +102,20 @@ public class ItemFragment extends Fragment {
         });
         ptr.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMoreBegin(LoadMorePtrFrameLayout frame) {
+            public void onLoadMoreBegin(final LoadMorePtrFrameLayout frame) {
                 System.out.println("onLoadMoreBeginonLoadMoreBegin=");
+                System.out.println("setOnLoadMoreListener=" +  1);
+                frame.showLoading();
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+//                        frame.showNormal();
+                        frame.showFail(null);
+                    }
+                }, 3000);
             }
         });
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
-    }
 }
